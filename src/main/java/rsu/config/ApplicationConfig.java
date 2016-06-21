@@ -2,6 +2,7 @@ package rsu.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -57,5 +58,10 @@ public class ApplicationConfig {
 		JpaTransactionManager txManager = new JpaTransactionManager();
 		txManager.setEntityManagerFactory(entityManagerFactory().getObject());
 		return txManager;
+	}
+
+	@Bean
+	public JdbcTemplate jdbcTemplate(){
+		return new JdbcTemplate(dataSource());
 	}
 }

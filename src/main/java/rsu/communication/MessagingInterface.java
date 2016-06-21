@@ -1,9 +1,11 @@
 package rsu.communication;
 
+import rsu.classification.DataSetCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
-import rsu.dao.WayRepo;
+import rsu.dao.WayDao;
+import rsu.data.DataProcessor;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -17,14 +19,20 @@ public class MessagingInterface {
 	private TaskExecutor taskExecutor;
 
 	@Autowired
-	private WayRepo wayRepo;
+	private DataProcessor dataProcessor;
+
+	@Autowired
+	private WayDao wayDao;
+
+	@Autowired
+	private DataSetCreator dataSetCreator;
 
 	@PostConstruct
 	public void startListening() throws IOException {
 		ServerSocket serverSocket = new ServerSocket(9999);
 		while (true) {
 			Socket socket = serverSocket.accept();
-			taskExecutor.execute(new Receiver(socket, wayRepo));
+			taskExecutor.execute(new Receiver(socket, dataProcessor, wayDao, dataSetCreator));
 		}
 	}
 }

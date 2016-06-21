@@ -1,26 +1,24 @@
 package rsu.dao.model;
 
 import javax.persistence.*;
-
-@NamedStoredProcedureQueries({
-		@NamedStoredProcedureQuery(
-				name = "mapMatching",
-				procedureName = "mapMatching",
-				parameters = {
-						@StoredProcedureParameter(mode = ParameterMode.IN, name = "latPi", type = Float.class),
-						@StoredProcedureParameter(mode = ParameterMode.IN, name = "longPi", type = Float.class),
-						@StoredProcedureParameter(mode = ParameterMode.IN, name = "latPj", type = Float.class),
-						@StoredProcedureParameter(mode = ParameterMode.IN, name = "longPj", type = Float.class),
-						@StoredProcedureParameter(mode = ParameterMode.OUT, name = "latM", type = Float.class),
-						@StoredProcedureParameter(mode = ParameterMode.OUT, name = "lonM", type = Float.class),
-						@StoredProcedureParameter(mode = ParameterMode.OUT, name = "wayM", type = Long.class),
-						@StoredProcedureParameter(mode = ParameterMode.OUT, name = "success", type = Integer.class)
-				},
-				resultClasses = MapMatchingResult.class) })
-@Entity
+//
+//@NamedStoredProcedureQueries({
+//		@NamedStoredProcedureQuery(
+//				name = "mapMatching",
+//				procedureName = "mapMatching",
+//				parameters = {
+//						@StoredProcedureParameter(mode = ParameterMode.IN, name = "latPi", type = Float.class),
+//						@StoredProcedureParameter(mode = ParameterMode.IN, name = "longPi", type = Float.class),
+//						@StoredProcedureParameter(mode = ParameterMode.IN, name = "latPj", type = Float.class),
+//						@StoredProcedureParameter(mode = ParameterMode.IN, name = "longPj", type = Float.class),
+//						@StoredProcedureParameter(mode = ParameterMode.OUT, name = "latM", type = Float.class),
+//						@StoredProcedureParameter(mode = ParameterMode.OUT, name = "lonM", type = Float.class),
+//						@StoredProcedureParameter(mode = ParameterMode.OUT, name = "wayM", type = Long.class),
+//						@StoredProcedureParameter(mode = ParameterMode.OUT, name = "success", type = Integer.class)
+//				},
+//				resultClasses = MapMatchingResult.class) })
 public class MapMatchingResult {
 
-	@Id
 	private long id;
 
 	private float latM;

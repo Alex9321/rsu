@@ -1,23 +1,34 @@
 package rsu.communication;
 
-import rsu.dao.WayRepo;
-import rsu.dto.Position;
-import rsu.dto.VehiclePosition;
+import rsu.charts.ChartCreator;
+import rsu.classification.DataSetCreator;
+import rsu.dao.WayDao;
+import rsu.data.DataProcessor;
+import rsu.dto.Vehicle;
 import rsu.utils.JsonUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class Receiver implements Runnable {
 
 	private Socket socket;
 
-	private WayRepo wayRepo;
+	private DataProcessor dataProcessor;
 
-	public Receiver(Socket socket, WayRepo wayRepo) {
+	private WayDao wayDao;
+
+	private DataSetCreator dataSetCreator;
+
+	public Receiver(Socket socket, DataProcessor dataProcessor, WayDao wayDao, DataSetCreator dataSetCreator) {
 		this.socket = socket;
-		this.wayRepo = wayRepo;
+		this.dataProcessor = dataProcessor;
+		this.wayDao = wayDao;
+		this.dataSetCreator = dataSetCreator;
 	}
 
 	@Override
@@ -28,12 +39,18 @@ public class Receiver implements Runnable {
 				String jsonMessage = inFromClient.readLine();
 				if (jsonMessage == null) {
 					socket.close();
+					Map<String, List<Vehicle>> vehiclePositionsMap = dataProcessor.getTrackedVehicles();
+					List<List<Vehicle>> orderedVehicles = new ArrayList<>(vehiclePositionsMap.values());
+					dataProcessor.getAllVehicles().clear();
+					dataProcessor.getTrackedVehicles().clear();
+//					dataSetCreator.createTrainingData(orderedVehicles);
+					dataSetCreator.createTestData(orderedVehicles);
+					new ChartCreator(orderedVehicles);
 					break;
 				}
-				VehiclePosition vehiclePositionFromJson = JsonUtils.getVehiclePositionFromJson(jsonMessage);
-				System.out.println(vehiclePositionFromJson);
-				Position position = vehiclePositionFromJson.getPosition();
-				System.out.println(wayRepo.mapMatching(position.getLatitude(), position.getLongitude(), position.getLatitude(), position.getLongitude()));
+				Vehicle vehicle = JsonUtils.getVehiclePositionFromJson(jsonMessage);
+				vehicle.setDistance(wayDao.getDistanceFromStart(vehicle.getPosition()));
+				dataProcessor.addVehiclePosition(vehicle);
 			}
 		}
 		catch (Exception e) {

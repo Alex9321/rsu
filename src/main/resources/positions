@@ -1,0 +1,56 @@
+veh0 :::: [Vehicle{vehicleId='veh0', position=46.753544,23.585325, speed=020.00, acceleration=5.0, distance=2.275506}
+, Vehicle{vehicleId='veh0', position=46.753593,23.585585, speed=020.52, acceleration=5.0, distance=22.244917}
+, Vehicle{vehicleId='veh0', position=46.753635,23.585817, speed=018.52, acceleration=5.0, distance=40.507748}
+, Vehicle{vehicleId='veh0', position=46.753674,23.586025, speed=016.52, acceleration=5.0, distance=56.926323}
+, Vehicle{vehicleId='veh0', position=46.753708,23.58621, speed=014.52, acceleration=5.0, distance=71.514984}
+, Vehicle{vehicleId='veh0', position=46.75374,23.586367, speed=012.52, acceleration=5.0, distance=83.9822}
+, Vehicle{vehicleId='veh0', position=46.753765,23.5865, speed=010.52, acceleration=5.0, distance=94.48745}
+, Vehicle{vehicleId='veh0', position=46.753777,23.586609, speed=008.52, acceleration=5.0, distance=102.86534}
+, Vehicle{vehicleId='veh0', position=46.753765,23.586693, speed=006.52, acceleration=5.0, distance=108.79054}
+, Vehicle{vehicleId='veh0', position=46.75376,23.586752, speed=004.52, acceleration=5.0, distance=113.06937}
+, Vehicle{vehicleId='veh0', position=46.753757,23.586784, speed=002.52, acceleration=5.0, distance=115.3918}
+, Vehicle{vehicleId='veh0', position=46.75378,23.586874, speed=007.52, acceleration=5.0, distance=122.62202}
+, Vehicle{vehicleId='veh0', position=46.753807,23.587032, speed=012.52, acceleration=5.0, distance=135.01976}
+, Vehicle{vehicleId='veh0', position=46.753838,23.587214, speed=014.15, acceleration=5.0, distance=149.29996}
+, Vehicle{vehicleId='veh0', position=46.753864,23.587368, speed=012.15, acceleration=5.0, distance=161.37872}
+, Vehicle{vehicleId='veh0', position=46.753883,23.587496, speed=010.15, acceleration=5.0, distance=171.35643}
+]
+ ============================================================================
+veh1 :::: [Vehicle{vehicleId='veh1', position=46.753498,23.585072, speed=012.00, acceleration=3.0, distance=18.347878}
+, Vehicle{vehicleId='veh1', position=46.753532,23.585262, speed=015.00, acceleration=3.0, distance=3.693182}
+, Vehicle{vehicleId='veh1', position=46.753574,23.58549, speed=018.00, acceleration=3.0, distance=14.747757}
+, Vehicle{vehicleId='veh1', position=46.75362,23.58573, speed=019.00, acceleration=3.0, distance=33.675003}
+, Vehicle{vehicleId='veh1', position=46.753662,23.585968, speed=019.00, acceleration=3.0, distance=52.39262}
+, Vehicle{vehicleId='veh1', position=46.753704,23.58618, speed=016.74, acceleration=3.0, distance=69.189606}
+, Vehicle{vehicleId='veh1', position=46.75374,23.586359, speed=014.24, acceleration=3.0, distance=83.3917}
+, Vehicle{vehicleId='veh1', position=46.753765,23.586508, speed=011.74, acceleration=3.0, distance=95.077896}
+, Vehicle{vehicleId='veh1', position=46.753773,23.586626, speed=009.24, acceleration=3.0, distance=104.01747}
+, Vehicle{vehicleId='veh1', position=46.753765,23.586714, speed=006.74, acceleration=3.0, distance=110.35319}
+, Vehicle{vehicleId='veh1', position=46.753757,23.586767, speed=004.24, acceleration=3.0, distance=114.122055}
+, Vehicle{vehicleId='veh1', position=46.753777,23.586855, speed=007.24, acceleration=3.0, distance=121.13688}
+, Vehicle{vehicleId='veh1', position=46.7538,23.586985, speed=010.24, acceleration=3.0, distance=131.35553}
+, Vehicle{vehicleId='veh1', position=46.75383,23.587152, speed=013.24, acceleration=3.0, distance=144.49538}
+, Vehicle{vehicleId='veh1', position=46.753857,23.587334, speed=014.20, acceleration=3.0, distance=158.6821}
+, Vehicle{vehicleId='veh1', position=46.753883,23.587482, speed=011.70, acceleration=3.0, distance=170.31465}
+]
+ ============================================================================
+veh2 :::: [Vehicle{vehicleId='veh2', position=46.75352,23.585197, speed=016.00, acceleration=4.0, distance=8.60652}
+, Vehicle{vehicleId='veh2', position=46.753563,23.585426, speed=018.00, acceleration=4.0, distance=9.753194}
+, Vehicle{vehicleId='veh2', position=46.7536,23.585644, speed=017.23, acceleration=4.0, distance=26.805357}
+, Vehicle{vehicleId='veh2', position=46.75364,23.585842, speed=015.73, acceleration=4.0, distance=42.48855}
+, Vehicle{vehicleId='veh2', position=46.753674,23.586021, speed=014.23, acceleration=4.0, distance=56.630165}
+, Vehicle{vehicleId='veh2', position=46.753704,23.586182, speed=012.73, acceleration=4.0, distance=69.33748}
+, Vehicle{vehicleId='veh2', position=46.75373,23.586325, speed=011.23, acceleration=4.0, distance=80.6076}
+, Vehicle{vehicleId='veh2', position=46.753754,23.586447, speed=009.73, acceleration=4.0, distance=90.27257}
+, Vehicle{vehicleId='veh2', position=46.753773,23.58655, speed=008.23, acceleration=4.0, distance=98.398224}
+, Vehicle{vehicleId='veh2', position=46.753773,23.586637, speed=006.73, acceleration=4.0, distance=104.83233}
+, Vehicle{vehicleId='veh2', position=46.753765,23.586704, speed=005.23, acceleration=4.0, distance=109.60893}
+, Vehicle{vehicleId='veh2', position=46.75376,23.586752, speed=003.73, acceleration=4.0, distance=113.06937}
+, Vehicle{vehicleId='veh2', position=46.753757,23.58678, speed=002.23, acceleration=4.0, distance=115.09299}
+, Vehicle{vehicleId='veh2', position=46.753777,23.586855, speed=006.23, acceleration=4.0, distance=121.13688}
+, Vehicle{vehicleId='veh2', position=46.7538,23.586985, speed=010.23, acceleration=4.0, distance=131.35553}
+, Vehicle{vehicleId='veh2', position=46.753826,23.587147, speed=012.77, acceleration=4.0, distance=144.02904}
+, Vehicle{vehicleId='veh2', position=46.753853,23.58729, speed=011.27, acceleration=4.0, distance=155.31232}
+, Vehicle{vehicleId='veh2', position=46.753872,23.587416, speed=009.77, acceleration=4.0, distance=165.14119}
+]
+ ============================================================================

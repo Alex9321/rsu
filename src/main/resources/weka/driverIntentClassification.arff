@@ -1,0 +1,21 @@
+@relation intent
+
+@attribute speed1 numeric
+@attribute speed2 numeric
+@attribute speed3 numeric
+@attribute speed4 numeric
+@attribute speed5 numeric
+@attribute stops {yes, no}
+
+@data
+70,18.5,no
+70,16,yes
+50,19.5,no
+55,19,no
+55,18.5,yes
+50,18,yes
+60,16,yes
+80,14.5,no
+80,14,yes
+100,10.5,yes
+100,11.6,no
