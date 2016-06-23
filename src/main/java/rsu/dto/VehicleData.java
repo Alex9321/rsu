@@ -1,8 +1,6 @@
 package rsu.dto;
 
-import java.text.DecimalFormat;
-
-public class Vehicle {
+public class VehicleData {
 
 	private String vehicleId;
 
@@ -12,18 +10,21 @@ public class Vehicle {
 
 	private float acceleration;
 
-	private float distance;
+	private float distanceFromA;
 
-	public Vehicle() {
+	private float distanceFromB;
+
+	public VehicleData() {
 
 	}
 
-	public Vehicle(String vehicleId, Position position, float speed, float acceleration, float distance) {
+	public VehicleData(String vehicleId, Position position, float speed, float acceleration, float distanceFromA, float distanceFromB) {
 		this.vehicleId = vehicleId;
 		this.position = position;
 		this.speed = speed;
 		this.acceleration = acceleration;
-		this.distance = distance;
+		this.distanceFromA = distanceFromA;
+		this.distanceFromB = distanceFromB;
 	}
 
 	public float getSpeed() {
@@ -58,23 +59,20 @@ public class Vehicle {
 		this.position = position;
 	}
 
-	public float getDistance() {
-		return distance;
+	public float getDistanceFromA() {
+		return distanceFromA;
 	}
 
-	public void setDistance(float distance) {
-		this.distance = distance;
+	public void setDistanceFromA(float distanceFromA) {
+		this.distanceFromA = distanceFromA;
 	}
 
-	@Override
-	public String toString() {
-		DecimalFormat decimalFormat = new DecimalFormat("#000.00");
-		return "Vehicle{" +
-				"vehicleId='" + vehicleId + '\'' +
-				", position=" + position +
-				", speed=" + decimalFormat.format(speed) +
-				", acceleration=" + acceleration +
-				", distance=" + distance +
-				"}\n";
+	public float getDistanceFromB() {
+		return distanceFromB;
 	}
+
+	public void setDistanceFromB(float distanceFromB) {
+		this.distanceFromB = distanceFromB;
+	}
+
 }

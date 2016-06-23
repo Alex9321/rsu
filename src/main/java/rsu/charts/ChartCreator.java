@@ -8,29 +8,43 @@ import org.jfree.data.xy.XYDataItem;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RefineryUtilities;
-import rsu.dto.Vehicle;
+import org.springframework.stereotype.Component;
+import rsu.dto.VehicleData;
 
 import javax.swing.JFrame;
 import java.awt.Dimension;
 import java.util.List;
 
-public class ChartCreator extends JFrame {
+@Component
+public class ChartCreator {
 
-	public ChartCreator(List<List<Vehicle>> vehicleLists) {
-		super("Driver intent");
+	public ChartCreator() {
+
+	}
+
+	public void showChart(List<List<VehicleData>> vehicleLists) {
+		JFrame frame = new JFrame("Driver intent");
 		JFreeChart speedDistanceChart = ChartFactory
 				.createXYLineChart("Driver template", "Distance", "Speed", createDataSet(vehicleLists), PlotOrientation.VERTICAL, false, false, false);
 
 		ChartPanel chartPanel = new ChartPanel(speedDistanceChart);
 		chartPanel.setPreferredSize(new Dimension(560, 367));
-		setContentPane(chartPanel);
-		pack();
-		RefineryUtilities.centerFrameOnScreen(this);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setVisible(true);
+		frame.setContentPane(chartPanel);
+		frame.pack();
+		RefineryUtilities.centerFrameOnScreen(frame);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setVisible(true);
 	}
 
-	private static double interpolate(XYSeries s, double x) {
+	public XYSeries createSpeedSeries(List<VehicleData> vehicleDataList) {
+		XYSeries vehicleSeries = new XYSeries(vehicleDataList.get(0).getVehicleId());
+		for (VehicleData vehicleData : vehicleDataList) {
+			vehicleSeries.add(vehicleData.getDistanceFromA(), vehicleData.getSpeed());
+		}
+		return vehicleSeries;
+	}
+
+	public double interpolate(XYSeries s, double x) {
 		if (x <= s.getMinX()) {
 			return s.getY(0).doubleValue();
 		}
@@ -53,24 +67,15 @@ public class ChartCreator extends JFrame {
 				return y;
 			}
 		}
-		// Should never happen
 		return 0;
 	}
 
-	private XYSeriesCollection createDataSet(List<List<Vehicle>> vehicleLists) {
+	private XYSeriesCollection createDataSet(List<List<VehicleData>> vehicleLists) {
 		XYSeriesCollection dataSet = new XYSeriesCollection();
-		for (List<Vehicle> vehicles : vehicleLists) {
-			dataSet.addSeries(createSpeedSeries(vehicles));
+		for (List<VehicleData> vehicleDatas : vehicleLists) {
+			dataSet.addSeries(createSpeedSeries(vehicleDatas));
 		}
 		return dataSet;
-	}
-
-	private XYSeries createSpeedSeries(List<Vehicle> vehicleList) {
-		XYSeries vehicleSeries = new XYSeries(vehicleList.get(0).getVehicleId());
-		for (Vehicle vehicle : vehicleList) {
-			vehicleSeries.add(vehicle.getDistance(), vehicle.getSpeed());
-		}
-		return vehicleSeries;
 	}
 
 }

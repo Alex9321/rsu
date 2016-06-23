@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import rsu.dao.WayDao;
 import rsu.dao.model.MapMatchingResult;
-import rsu.dto.Vehicle;
+import rsu.dto.VehicleData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,45 +17,66 @@ public class DataProcessor {
 	@Autowired
 	private WayDao wayDao;
 
-	private Map<String, List<Vehicle>> allVehicles = new HashMap<>();
+	private Map<String, List<VehicleData>> allVehicles = new HashMap<>();
 
-	private Map<String, List<Vehicle>> trackedVehicles = new HashMap<>();
+	private Map<String, List<VehicleData>> trackedVehicles = new HashMap<>();
 
-	public void addVehiclePosition(Vehicle vehicle) {
-		List<Vehicle> vehicles = allVehicles.get(vehicle.getVehicleId());
-		if (vehicles == null) {
-			vehicles = new ArrayList<>();
+	private Map<String, List<VehicleData>> toBeWarnedVehicles = new HashMap<>();
+
+	public void addVehiclePosition(VehicleData vehicleData) {
+		List<VehicleData> vehicleDatas = allVehicles.get(vehicleData.getVehicleId());
+		if (vehicleDatas == null) {
+			vehicleDatas = new ArrayList<>();
 		}
-		vehicles.add(vehicle);
-		if (vehicles.size() > 1) {
-			if (trackedVehicles.containsKey(vehicle.getVehicleId())) {
-				addToTrackedVehicles(vehicle);
+		vehicleDatas.add(vehicleData);
+		if (vehicleDatas.size() > 1) {
+			if (trackedVehicles.containsKey(vehicleData.getVehicleId())) {
+				addToTrackedVehicles(vehicleData);
 			}
 			else {
-				MapMatchingResult mapMatchingResult = wayDao.mapMatching(vehicles.get(vehicles.size() - 2).getPosition(), vehicles.get(vehicles.size() - 1).getPosition());
-				if (mapMatchingResult.getWayM() == 46331812) {
-					addToTrackedVehicles(vehicle);
+				MapMatchingResult mapMatchingResult = wayDao
+						.mapMatching(vehicleDatas.get(vehicleDatas.size() - 2).getPosition(), vehicleDatas.get(vehicleDatas.size() - 1).getPosition());
+				if (mapMatchingResult.isSuccess()) {
+					if (mapMatchingResult.getWayM() == 46331812) {
+						addToTrackedVehicles(vehicleData);
+					}
+					if (mapMatchingResult.getWayM() == 31581244) {
+						addToToBeWarnedVehicles(vehicleData);
+					}
 				}
 			}
 		}
-		allVehicles.put(vehicle.getVehicleId(), vehicles);
+		allVehicles.put(vehicleData.getVehicleId(), vehicleDatas);
 	}
 
-	private void addToTrackedVehicles(Vehicle vehicle) {
-		List<Vehicle> vehicles = trackedVehicles.get(vehicle.getVehicleId());
-		if (vehicles == null) {
-			vehicles = new ArrayList<>();
+	private void addToTrackedVehicles(VehicleData vehicleData) {
+		List<VehicleData> vehicleDatas = trackedVehicles.get(vehicleData.getVehicleId());
+		if (vehicleDatas == null) {
+			vehicleDatas = new ArrayList<>();
 		}
-		vehicles.add(vehicle);
-		trackedVehicles.put(vehicle.getVehicleId(), vehicles);
+		vehicleDatas.add(vehicleData);
+		trackedVehicles.put(vehicleData.getVehicleId(), vehicleDatas);
 	}
 
-	public Map<String, List<Vehicle>> getAllVehicles() {
+	private void addToToBeWarnedVehicles(VehicleData vehicleData) {
+		List<VehicleData> vehicleDatas = toBeWarnedVehicles.get(vehicleData.getVehicleId());
+		if (vehicleDatas == null) {
+			vehicleDatas = new ArrayList<>();
+		}
+		vehicleDatas.add(vehicleData);
+		toBeWarnedVehicles.put(vehicleData.getVehicleId(), vehicleDatas);
+	}
+
+	public Map<String, List<VehicleData>> getAllVehicles() {
 		return allVehicles;
 	}
 
-	public Map<String, List<Vehicle>> getTrackedVehicles() {
+	public Map<String, List<VehicleData>> getTrackedVehicles() {
 		return trackedVehicles;
+	}
+
+	public Map<String, List<VehicleData>> getToBeWarnedVehicles() {
+		return toBeWarnedVehicles;
 	}
 
 }

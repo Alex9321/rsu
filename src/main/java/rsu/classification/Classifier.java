@@ -1,5 +1,8 @@
 package rsu.classification;
 
+import org.jfree.data.xy.XYSeries;
+import org.springframework.stereotype.Component;
+import rsu.charts.ChartCreator;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
@@ -7,9 +10,11 @@ import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
+@Component
 public class Classifier {
 
-	public static void main(String[] args) throws Exception {
+	public boolean stops(XYSeries speeds) throws Exception {
+		ChartCreator chartCreator = new ChartCreator();
 		NaiveBayes naiveBayes = new NaiveBayes();
 		DataSource source = new DataSource("weka/driverIntentTrainingModel.arff");
 		Instances instances = source.getDataSet();
@@ -17,18 +22,14 @@ public class Classifier {
 
 		naiveBayes.buildClassifier(instances);
 
-		Instance instance = new DenseInstance(6);
-		instance.setValue(new Attribute("speed1", 0), 12.56);
-		instance.setValue(new Attribute("speed2", 1), 10.519);
-		instance.setValue(new Attribute("speed3", 2), 8.519);
-		instance.setValue(new Attribute("speed4", 3), 6.519);
-		instance.setValue(new Attribute("speed5", 4), 4.519);
-		instance.setValue(new Attribute("speed6", 5), 2.519);
+		Instance instance = new DenseInstance(25);
+
+		for (int i = 40; i < 65; i++) {
+			instance.setValue(new Attribute("speed" + (i - 39), i - 40), chartCreator.interpolate(speeds, i));
+		}
 		instance.setDataset(instances);
 
-		System.out.println(naiveBayes.classifyInstance(instance));
-
-		naiveBayes.distributionForInstance(instance);
+		return naiveBayes.classifyInstance(instance) == 0.0;
 	}
 
 }
