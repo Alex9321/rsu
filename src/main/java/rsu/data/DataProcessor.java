@@ -24,6 +24,8 @@ public class DataProcessor {
 	private Map<String, List<VehicleData>> toBeWarnedVehicles = new HashMap<>();
 
 	public void addVehiclePosition(VehicleData vehicleData) {
+		vehicleData.setDistanceFromA(wayDao.getDistanceFromA(vehicleData.getPosition()));
+		vehicleData.setDistanceFromB(wayDao.getDistanceFromB(vehicleData.getPosition()));
 		List<VehicleData> vehicleDatas = allVehicles.get(vehicleData.getVehicleId());
 		if (vehicleDatas == null) {
 			vehicleDatas = new ArrayList<>();

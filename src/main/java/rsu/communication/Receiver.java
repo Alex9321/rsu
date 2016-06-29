@@ -1,15 +1,12 @@
 package rsu.communication;
 
+import rsu.Run;
 import rsu.charts.ChartCreator;
-import rsu.classification.Classifier;
-import rsu.classification.DataSetCreator;
-import rsu.dao.WayDao;
 import rsu.data.DataProcessor;
 import rsu.dto.VehicleData;
 import rsu.utils.JsonUtils;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -19,28 +16,22 @@ import java.util.Map;
 
 public class Receiver implements Runnable {
 
+	private int dayPeriod;
+
 	private Socket socket;
 
 	private DataProcessor dataProcessor;
 
-	private WayDao wayDao;
-
-	private DataSetCreator dataSetCreator;
-
-	private Classifier classifier;
-
-	private SituationHandler situationAnalyser;
+	private TrafficAnalyser trafficAnalyser;
 
 	private ChartCreator chartCreator;
 
-	public Receiver(Socket socket, DataProcessor dataProcessor, WayDao wayDao, DataSetCreator dataSetCreator, Classifier classifier, SituationHandler situationAnalyser,
+	public Receiver(int dayPeriod, Socket socket, DataProcessor dataProcessor, TrafficAnalyser trafficAnalyser,
 			ChartCreator chartCreator) {
+		this.dayPeriod = dayPeriod;
 		this.socket = socket;
 		this.dataProcessor = dataProcessor;
-		this.wayDao = wayDao;
-		this.dataSetCreator = dataSetCreator;
-		this.classifier = classifier;
-		this.situationAnalyser = situationAnalyser;
+		this.trafficAnalyser = trafficAnalyser;
 		this.chartCreator = chartCreator;
 	}
 
@@ -55,22 +46,22 @@ public class Receiver implements Runnable {
 					socket.close();
 					Map<String, List<VehicleData>> vehiclePositionsMap = dataProcessor.getTrackedVehicles();
 					List<List<VehicleData>> orderedVehicles = new ArrayList<>(vehiclePositionsMap.values());
-					createTrainingData(orderedVehicles);
+					if ("TRAIN".equals(Run.MODE)) {
+						createTrainingData(orderedVehicles);
+					}
 					chartCreator.showChart(orderedVehicles);
-					dataProcessor.getToBeWarnedVehicles().clear();
-					dataProcessor.getTrackedVehicles().clear();
-					dataProcessor.getAllVehicles().clear();
+					clearInMemoryData();
 					break;
 				}
 				VehicleData vehicleData = JsonUtils.getVehiclePositionFromJson(jsonMessage);
-				vehicleData.setDistanceFromA(wayDao.getDistanceFromA(vehicleData.getPosition()));
-				vehicleData.setDistanceFromB(wayDao.getDistanceFromB(vehicleData.getPosition()));
 				dataProcessor.addVehiclePosition(vehicleData);
-				if (dataProcessor.getTrackedVehicles().containsKey(vehicleData.getVehicleId())) {
-					situationAnalyser.analyse(vehicleData, clientWriter);
-				}
-				else {
-					clientWriter.println("Nu");
+				if ("NORMAL".equals(Run.MODE)) {
+					if (dataProcessor.getTrackedVehicles().containsKey(vehicleData.getVehicleId())) {
+						trafficAnalyser.analyse(vehicleData, clientWriter, dayPeriod);
+					}
+					else {
+						clientWriter.println("Safe");
+					}
 				}
 			}
 		}
@@ -79,9 +70,13 @@ public class Receiver implements Runnable {
 		}
 	}
 
-	private void createTrainingData(List<List<VehicleData>> orderedVehicles) throws IOException {
+	private void createTrainingData(List<List<VehicleData>> orderedVehicles) throws Exception {
+		trafficAnalyser.reTrain(orderedVehicles, dayPeriod);
+	}
+
+	public void clearInMemoryData() {
 		dataProcessor.getAllVehicles().clear();
 		dataProcessor.getTrackedVehicles().clear();
-		dataSetCreator.createTestData(orderedVehicles);
+		dataProcessor.getToBeWarnedVehicles().clear();
 	}
 }

@@ -11,7 +11,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 @Component
-public class SituationHandler {
+public class TrafficAnalyser {
 
 	@Autowired
 	private DataProcessor dataProcessor;
@@ -22,15 +22,15 @@ public class SituationHandler {
 	@Autowired
 	private ChartCreator chartCreator;
 
-	public void analyse(VehicleData vehicle, PrintWriter clientWriter) throws Exception {
+	public void analyse(VehicleData vehicle, PrintWriter clientWriter, int dayPeriod) throws Exception {
 		boolean sentWarning = false;
-		if (vehicle.getDistanceFromA() >= 65) {
+		if (vehicle.getDistanceFromA() >= 50) {
 			List<VehicleData> vehicleDataTrace = dataProcessor.getTrackedVehicles().get(vehicle.getVehicleId());
-			if (vehicleDataTrace != null && !classifier.stops(chartCreator.createSpeedSeries(vehicleDataTrace))) {
+			if (vehicleDataTrace != null && !classifier.stops(chartCreator.createSpeedSeries(vehicleDataTrace), dayPeriod)) {
 				for (List<VehicleData> vehicleDataData : dataProcessor.getToBeWarnedVehicles().values()) {
 					VehicleData lastData = vehicleDataData.get(vehicleDataData.size() - 1);
 					float distanceFromB = lastData.getDistanceFromB();
-					if (distanceFromB > 30 && distanceFromB < 80) {
+					if (distanceFromB > 50 && distanceFromB < 75.5) {
 						sentWarning = true;
 						clientWriter.println(lastData.getVehicleId());
 						System.out.println("Warned vehicle: " + vehicle.getVehicleId());
@@ -39,8 +39,12 @@ public class SituationHandler {
 			}
 		}
 		if (!sentWarning) {
-			clientWriter.println("Nu");
+			clientWriter.println("Safe");
 		}
+	}
+
+	public void reTrain(List<List<VehicleData>> vehicleModel, int dayPeriod) throws Exception {
+		classifier.reTrain(vehicleModel, dayPeriod);
 	}
 
 }
