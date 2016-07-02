@@ -23,9 +23,9 @@ public class DataProcessor {
 
 	private Map<String, List<VehicleData>> toBeWarnedVehicles = new HashMap<>();
 
-	public void addVehiclePosition(VehicleData vehicleData) {
-		vehicleData.setDistanceFromA(wayDao.getDistanceFromA(vehicleData.getPosition()));
-		vehicleData.setDistanceFromB(wayDao.getDistanceFromB(vehicleData.getPosition()));
+	public void addVehiclePosition(VehicleData vehicleData, String scenario) {
+		vehicleData.setDistanceFromA(wayDao.getDistanceFromA(vehicleData.getPosition(), scenario));
+		vehicleData.setDistanceFromB(wayDao.getDistanceFromB(vehicleData.getPosition(), scenario));
 		List<VehicleData> vehicleDatas = allVehicles.get(vehicleData.getVehicleId());
 		if (vehicleDatas == null) {
 			vehicleDatas = new ArrayList<>();
@@ -39,12 +39,22 @@ public class DataProcessor {
 				MapMatchingResult mapMatchingResult = wayDao
 						.mapMatching(vehicleDatas.get(vehicleDatas.size() - 2).getPosition(), vehicleDatas.get(vehicleDatas.size() - 1).getPosition());
 				if (mapMatchingResult.isSuccess()) {
-					float heading = wayDao.getHeading(vehicleDatas.get(vehicleDatas.size() - 2).getPosition(), vehicleDatas.get(vehicleDatas.size() - 1).getPosition());
-					if (heading < 4) {
-						addToTrackedVehicles(vehicleData);
+					if (scenario.equals("meteor")) {
+						if (mapMatchingResult.getWayM() == 46331812) {
+							addToTrackedVehicles(vehicleData);
+						}
+						if (mapMatchingResult.getWayM() == 31581244) {
+							addToToBeWarnedVehicles(vehicleData);
+						}
 					}
 					else {
-						addToToBeWarnedVehicles(vehicleData);
+						float heading = wayDao.getHeading(vehicleDatas.get(vehicleDatas.size() - 2).getPosition(), vehicleDatas.get(vehicleDatas.size() - 1).getPosition());
+						if (heading < 4) {
+							addToTrackedVehicles(vehicleData);
+						}
+						else {
+							addToToBeWarnedVehicles(vehicleData);
+						}
 					}
 				}
 			}

@@ -1,6 +1,5 @@
 package rsu.communication;
 
-import rsu.Run;
 import rsu.charts.ChartCreator;
 import rsu.data.DataProcessor;
 import rsu.dto.VehicleData;
@@ -16,8 +15,6 @@ import java.util.Map;
 
 public class Receiver implements Runnable {
 
-	private int dayPeriod;
-
 	private Socket socket;
 
 	private DataProcessor dataProcessor;
@@ -26,9 +23,7 @@ public class Receiver implements Runnable {
 
 	private ChartCreator chartCreator;
 
-	public Receiver(int dayPeriod, Socket socket, DataProcessor dataProcessor, TrafficAnalyser trafficAnalyser,
-			ChartCreator chartCreator) {
-		this.dayPeriod = dayPeriod;
+	public Receiver(Socket socket, DataProcessor dataProcessor, TrafficAnalyser trafficAnalyser, ChartCreator chartCreator) {
 		this.socket = socket;
 		this.dataProcessor = dataProcessor;
 		this.trafficAnalyser = trafficAnalyser;
@@ -39,30 +34,35 @@ public class Receiver implements Runnable {
 	public void run() {
 		try {
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			String settings[] = inFromClient.readLine().split(",");
+			String scenario = settings[0];
+			String mode = settings[1];
+			String period = settings[2];
 			PrintWriter clientWriter = new PrintWriter(socket.getOutputStream(), true);
+			clientWriter.println("Safe");
 			while (true) {
 				String jsonMessage = inFromClient.readLine();
 				if (jsonMessage == null) {
 					socket.close();
 					Map<String, List<VehicleData>> vehiclePositionsMap = dataProcessor.getTrackedVehicles();
 					List<List<VehicleData>> orderedVehicles = new ArrayList<>(vehiclePositionsMap.values());
-					if ("TRAIN".equals(Run.MODE)) {
-						createTrainingData(orderedVehicles);
+					if ("train".equals(mode)) {
+						createTrainingData(orderedVehicles, Integer.parseInt(period), scenario);
 					}
 					chartCreator.showChart(orderedVehicles);
 					clearInMemoryData();
 					break;
 				}
 				VehicleData vehicleData = JsonUtils.getVehiclePositionFromJson(jsonMessage);
-				dataProcessor.addVehiclePosition(vehicleData);
-//				if ("NORMAL".equals(Run.MODE)) {
+				dataProcessor.addVehiclePosition(vehicleData, scenario);
+				if ("run".equals(mode)) {
 					if (dataProcessor.getTrackedVehicles().containsKey(vehicleData.getVehicleId())) {
-						trafficAnalyser.analyse(vehicleData, clientWriter, dayPeriod);
+						trafficAnalyser.analyse(vehicleData, clientWriter, Integer.parseInt(period));
 					}
 					else {
 						clientWriter.println("Safe");
 					}
-//				}
+				}
 			}
 		}
 		catch (Exception e) {
@@ -70,8 +70,8 @@ public class Receiver implements Runnable {
 		}
 	}
 
-	private void createTrainingData(List<List<VehicleData>> orderedVehicles) throws Exception {
-		trafficAnalyser.reTrain(orderedVehicles, dayPeriod);
+	private void createTrainingData(List<List<VehicleData>> orderedVehicles, int dayPeriod, String scenario) throws Exception {
+		trafficAnalyser.reTrain(orderedVehicles, dayPeriod, scenario);
 	}
 
 	public void clearInMemoryData() {

@@ -11,14 +11,6 @@ import java.util.List;
 @Repository
 public class WayDao {
 
-	private static String firstScenarioA = "23.5852987, 46.7535537";
-
-	private static String firstScenarioB = "23.5867874, 46.7529477";
-
-	private static String secondScenarioA = "23.5831504, 46.7518788";
-
-	private static String secondScenarioB = "23.5813245, 46.7536431";
-
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
@@ -38,19 +30,35 @@ public class WayDao {
 		return mapMatchingResult.get(0);
 	}
 
-	public float getDistanceFromA(Position position) {
-		String sql =
-				"select ST_Distance_Sphere(ST_SetSRID(ST_Point(" + secondScenarioA + "), 4326), ST_SetSRID(ST_Point(" + position.getLongitude() + "," + position.getLatitude() +
-						"), 4326));";
+	public float getDistanceFromA(Position position, String scenario) {
+		String sql;
+		if (scenario.equals("meteor")) {
+			String firstScenarioA = "23.5852987, 46.7535537";
+			sql = "select ST_Distance_Sphere(ST_SetSRID(ST_Point(" + firstScenarioA + "), 4326), ST_SetSRID(ST_Point(" + position.getLongitude() + "," + position.getLatitude() +
+					"), 4326));";
+		}
+		else {
+			String secondScenarioA = "23.5831504, 46.7518788";
+			sql = "select ST_Distance_Sphere(ST_SetSRID(ST_Point(" + secondScenarioA + "), 4326), ST_SetSRID(ST_Point(" + position.getLongitude() + "," + position.getLatitude() +
+					"), 4326));";
+		}
 		return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
 			return rs.getFloat(1);
 		});
 	}
 
-	public float getDistanceFromB(Position position) {
-		String sql =
-				"select ST_Distance_Sphere(ST_SetSRID(ST_Point(" + secondScenarioB + "), 4326), ST_SetSRID(ST_Point(" + position.getLongitude() + "," + position.getLatitude() +
-						"), 4326));";
+	public float getDistanceFromB(Position position, String scenario) {
+		String sql;
+		if (scenario.equals("meteor")) {
+			String firstScenarioB = "23.5867874, 46.7529477";
+			sql = "select ST_Distance_Sphere(ST_SetSRID(ST_Point(" + firstScenarioB + "), 4326), ST_SetSRID(ST_Point(" + position.getLongitude() + "," + position.getLatitude() +
+					"), 4326));";
+		}
+		else {
+			String secondScenarioB = "23.5813245, 46.7536431";
+			sql = "select ST_Distance_Sphere(ST_SetSRID(ST_Point(" + secondScenarioB + "), 4326), ST_SetSRID(ST_Point(" + position.getLongitude() + "," + position.getLatitude() +
+					"), 4326));";
+		}
 		return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
 			return rs.getFloat(1);
 		});

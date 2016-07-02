@@ -21,11 +21,11 @@ public class DataSetManager {
 	@Autowired
 	ChartCreator chartCreator;
 
-	public void createTrainingData(List<List<VehicleData>> vehicleModel) throws IOException {
+	public void createTrainingData(List<List<VehicleData>> vehicleModel, String scenario, int dayPeriod) throws IOException {
 
 		StringBuilder sb;
 		List<String> lines = new ArrayList<>();
-		File file = new File("/Users/alex/School/rsu/src/main/resources/weka/trainingModel.arff");
+		File file = new File("/Users/alex/School/rsu/src/main/resources/weka/" + scenario + "/trainingModel" + dayPeriod + ".arff");
 		lines.add("@relation intent");
 		lines.add("\n");
 		for (int i = 1; i <= 30; i++) {
@@ -37,11 +37,20 @@ public class DataSetManager {
 		for (List<VehicleData> vehicleDatas : vehicleModel) {
 			XYSeries xySeries = chartCreator.createSpeedSeries(vehicleDatas);
 			sb = new StringBuilder();
-			for (int i = 70; i < 100; i++) {
+			int start = 20;
+			int end = 50;
+			int interpolation  = 110;
+			if (scenario.equals("rapsodiei")) {
+				start = 70;
+				end = 100;
+				interpolation = 160;
+			}
+			for (int i = start; i < end; i++) {
 				sb.append(String.format("%.2f", interpolate(xySeries, i)));
 				sb.append(", ");
 			}
-			double intersectionSpeed = interpolate(xySeries, 160);
+
+			double intersectionSpeed = interpolate(xySeries, interpolation);
 			if (intersectionSpeed > 8) {
 				sb.append("no");
 			}

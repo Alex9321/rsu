@@ -43,8 +43,8 @@ public class TrafficAnalyser {
 		}
 	}
 
-	public void reTrain(List<List<VehicleData>> vehicleModel, int dayPeriod) throws Exception {
-		classifier.reTrain(vehicleModel, dayPeriod);
+	public void reTrain(List<List<VehicleData>> vehicleModel, int dayPeriod, String scenario) throws Exception {
+		classifier.reTrain(vehicleModel, dayPeriod, scenario);
 	}
 
 }

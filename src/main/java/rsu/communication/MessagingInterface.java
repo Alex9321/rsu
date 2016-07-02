@@ -45,9 +45,9 @@ public class MessagingInterface {
 				dayPeriod = 2;
 			}
 			if (now.isBefore(seven) || now.isAfter(twenty)) {
-				dayPeriod = 2;
+				dayPeriod = 3;
 			}
-			taskExecutor.execute(new Receiver(dayPeriod, socket, dataProcessor, trafficAnalyser, chartCreator));
+			taskExecutor.execute(new Receiver(socket, dataProcessor, trafficAnalyser, chartCreator));
 		}
 	}
 }
