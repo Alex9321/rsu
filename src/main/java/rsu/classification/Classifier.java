@@ -52,8 +52,8 @@ public class Classifier {
 	public boolean stops(XYSeries speeds, int dayPeriod) throws Exception {
 		Instance instance = new DenseInstance(30);
 
-		for (int i = 20; i < 50; i++) {
-			instance.setValue(new Attribute("speed" + (i - 19), i - 20), dataSetManager.interpolate(speeds, i));
+		for (int i = 70; i < 100; i++) {
+			instance.setValue(new Attribute("speed" + (i - 69), i - 70), dataSetManager.interpolate(speeds, i));
 		}
 
 		double classification = 0.0;

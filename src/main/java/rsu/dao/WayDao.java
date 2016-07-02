@@ -11,6 +11,14 @@ import java.util.List;
 @Repository
 public class WayDao {
 
+	private static String firstScenarioA = "23.5852987, 46.7535537";
+
+	private static String firstScenarioB = "23.5867874, 46.7529477";
+
+	private static String secondScenarioA = "23.5831504, 46.7518788";
+
+	private static String secondScenarioB = "23.5813245, 46.7536431";
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
@@ -31,16 +39,26 @@ public class WayDao {
 	}
 
 	public float getDistanceFromA(Position position) {
-		String sql = "select ST_Distance_Sphere(ST_SetSRID(ST_Point(23.5852987, 46.7535537), 4326), ST_SetSRID(ST_Point(" + position.getLongitude() + "," + position.getLatitude() +
-				"), 4326));";
+		String sql =
+				"select ST_Distance_Sphere(ST_SetSRID(ST_Point(" + secondScenarioA + "), 4326), ST_SetSRID(ST_Point(" + position.getLongitude() + "," + position.getLatitude() +
+						"), 4326));";
 		return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
 			return rs.getFloat(1);
 		});
 	}
 
 	public float getDistanceFromB(Position position) {
-		String sql = "select ST_Distance_Sphere(ST_SetSRID(ST_Point(23.5867874, 46.7529477), 4326), ST_SetSRID(ST_Point(" + position.getLongitude() + "," + position.getLatitude() +
-				"), 4326));";
+		String sql =
+				"select ST_Distance_Sphere(ST_SetSRID(ST_Point(" + secondScenarioB + "), 4326), ST_SetSRID(ST_Point(" + position.getLongitude() + "," + position.getLatitude() +
+						"), 4326));";
+		return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+			return rs.getFloat(1);
+		});
+	}
+
+	public float getHeading(Position firstPosition, Position secondPosition) {
+		String sql = "SELECT ST_Azimuth(ST_GeomFromText('POINT(" + firstPosition.getLatitude() + " " + firstPosition.getLongitude() + ")', 4326), ST_GeomFromText('POINT(" +
+				secondPosition.getLatitude() + " " + secondPosition.getLongitude() + ")', 4326));";
 		return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
 			return rs.getFloat(1);
 		});

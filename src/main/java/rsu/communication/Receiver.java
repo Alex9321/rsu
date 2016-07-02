@@ -55,14 +55,14 @@ public class Receiver implements Runnable {
 				}
 				VehicleData vehicleData = JsonUtils.getVehiclePositionFromJson(jsonMessage);
 				dataProcessor.addVehiclePosition(vehicleData);
-				if ("NORMAL".equals(Run.MODE)) {
+//				if ("NORMAL".equals(Run.MODE)) {
 					if (dataProcessor.getTrackedVehicles().containsKey(vehicleData.getVehicleId())) {
 						trafficAnalyser.analyse(vehicleData, clientWriter, dayPeriod);
 					}
 					else {
 						clientWriter.println("Safe");
 					}
-				}
+//				}
 			}
 		}
 		catch (Exception e) {

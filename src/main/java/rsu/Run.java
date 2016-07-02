@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Run {
 
-	public static String MODE = "NORMAL";
+	public static String MODE = "TRAIN";
 
 	public static void main(String[] args) {
 		if (args.length > 0) {

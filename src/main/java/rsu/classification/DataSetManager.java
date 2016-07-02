@@ -37,11 +37,11 @@ public class DataSetManager {
 		for (List<VehicleData> vehicleDatas : vehicleModel) {
 			XYSeries xySeries = chartCreator.createSpeedSeries(vehicleDatas);
 			sb = new StringBuilder();
-			for (int i = 20; i < 50; i++) {
+			for (int i = 70; i < 100; i++) {
 				sb.append(String.format("%.2f", interpolate(xySeries, i)));
 				sb.append(", ");
 			}
-			double intersectionSpeed = interpolate(xySeries, 110);
+			double intersectionSpeed = interpolate(xySeries, 160);
 			if (intersectionSpeed > 8) {
 				sb.append("no");
 			}

@@ -39,10 +39,11 @@ public class DataProcessor {
 				MapMatchingResult mapMatchingResult = wayDao
 						.mapMatching(vehicleDatas.get(vehicleDatas.size() - 2).getPosition(), vehicleDatas.get(vehicleDatas.size() - 1).getPosition());
 				if (mapMatchingResult.isSuccess()) {
-					if (mapMatchingResult.getWayM() == 46331812) {
+					float heading = wayDao.getHeading(vehicleDatas.get(vehicleDatas.size() - 2).getPosition(), vehicleDatas.get(vehicleDatas.size() - 1).getPosition());
+					if (heading < 4) {
 						addToTrackedVehicles(vehicleData);
 					}
-					if (mapMatchingResult.getWayM() == 31581244) {
+					else {
 						addToToBeWarnedVehicles(vehicleData);
 					}
 				}
