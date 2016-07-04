@@ -1,7 +1,6 @@
 package rsu.dto;
 
 public class VehicleData {
-
 	private String vehicleId;
 
 	private Position position;
@@ -25,6 +24,18 @@ public class VehicleData {
 		this.acceleration = acceleration;
 		this.distanceFromA = distanceFromA;
 		this.distanceFromB = distanceFromB;
+	}
+
+	@Override
+	public String toString() {
+		return "VehicleData{" +
+				"vehicleId='" + vehicleId + '\'' +
+				", position=" + position +
+				", speed=" + speed +
+				", acceleration=" + acceleration +
+				", distanceFromA=" + distanceFromA +
+				", distanceFromB=" + distanceFromB +
+				'}';
 	}
 
 	public float getSpeed() {

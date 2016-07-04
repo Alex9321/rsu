@@ -39,7 +39,7 @@ public class DataSetManager {
 			sb = new StringBuilder();
 			int start = 20;
 			int end = 50;
-			int interpolation  = 110;
+			int interpolation  = 111;
 			if (scenario.equals("rapsodiei")) {
 				start = 70;
 				end = 100;
@@ -51,7 +51,7 @@ public class DataSetManager {
 			}
 
 			double intersectionSpeed = interpolate(xySeries, interpolation);
-			if (intersectionSpeed > 8) {
+			if (intersectionSpeed > 9) {
 				sb.append("no");
 			}
 			else {

@@ -55,6 +55,7 @@ public class Receiver implements Runnable {
 				}
 				VehicleData vehicleData = JsonUtils.getVehiclePositionFromJson(jsonMessage);
 				dataProcessor.addVehiclePosition(vehicleData, scenario);
+				System.out.println(vehicleData.toString());
 				if ("run".equals(mode)) {
 					if (dataProcessor.getTrackedVehicles().containsKey(vehicleData.getVehicleId())) {
 						trafficAnalyser.analyse(vehicleData, clientWriter, Integer.parseInt(period));
